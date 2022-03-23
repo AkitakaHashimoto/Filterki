@@ -1,0 +1,9 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+std::string GetPathData()
+{
+    return "${FILEPATH_DATA}";
+}
+
+#endif // CONFIG_H

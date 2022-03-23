@@ -7,4 +7,4 @@ find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 add_executable(Filterki main.cpp)
 
 target_link_libraries(Filterki sfml-graphics sfml-audio sfml-system sfml-window)
-target_link_libraries(Filterki tgui)
+target_include_directories(Filterki PUBLIC ${CMAKE_SOURCE_DIR}/include)
