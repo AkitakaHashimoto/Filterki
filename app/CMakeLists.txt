@@ -8,3 +8,4 @@ add_executable(Filterki main.cpp)
 
 target_link_libraries(Filterki sfml-graphics sfml-audio sfml-system sfml-window)
 target_include_directories(Filterki PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_compile_features(Filterki PRIVATE cxx_std_17)

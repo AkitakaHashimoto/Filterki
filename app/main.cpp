@@ -9,8 +9,8 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1000, 1000), "SFML works!");
 	sf::Texture tex{};
-	const auto path = GetPathData() + "/Rumble.jpg";
-	tex.loadFromFile(path);
+	const auto path = GetPathData()/"Rumble.jpg";
+	tex.loadFromFile(path.string());
 	sf::Sprite sprite{};
 	sprite.setTexture(tex);
 
