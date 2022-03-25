@@ -7,12 +7,25 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1000, 1000), "SFML works!");
 	sf::Texture tex{};
-	const auto path = GetPathData()/"Rumble.jpg";
-	tex.loadFromFile(path.string());
+	const auto pathImage = GetPathData() / "images" / "irene.png";
+	tex.loadFromFile(pathImage.string());
 	sf::Sprite sprite{};
 	sprite.setTexture(tex);
+
+	sf::Shader shader{};
+	const auto texWidth{ static_cast<float>(sprite.getTexture()->getSize().x) };
+	const auto texHeight{ static_cast<float>(sprite.getTexture()->getSize().y) };
+
+	const auto pathShaderFrag = GetPathData() / "shaders" / "sobel.frag";
+	//const auto pathShaderVert = GetPathData() / "shaders" / "sobel.vert";
+	//shader.loadFromFile(pathShaderVert.string(), sf::Shader::Vertex);
+	shader.loadFromFile(pathShaderFrag.string(), sf::Shader::Fragment);
+	shader.setUniform("texture", sf::Shader::CurrentTexture);
+	shader.setUniform("width", texWidth);
+	shader.setUniform("height", texHeight);
+
+	sf::RenderWindow window(sf::VideoMode(sprite.getTexture()->getSize().x, sprite.getTexture()->getSize().y), "SFML works!");
 
 	while (window.isOpen())
 	{
@@ -24,7 +37,7 @@ int main()
 		}
 
 		window.clear();
-		window.draw(sprite);
+		window.draw(sprite, &shader);
 		window.display();
 	}
 
