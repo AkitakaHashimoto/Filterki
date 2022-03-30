@@ -1,0 +1,125 @@
+Renderer.1 {
+    BackgroundColor = #3A3B3C;
+    BorderColor = #3A3B3C;
+    Borders = (0, 0, 0, 0);
+    TextColor = white;
+    TextureBackground = None;
+}
+
+ChildWindow.ChildWindow1 {
+    Position = (30, 100);
+    PositionLocked = true;
+    Size = (1520, 847.5);
+    TitleAlignment = Center;
+    TitleButtons = None;
+    TitleTextSize = 13;
+
+    Renderer {
+        BackgroundColor = #3A3B3C;
+        BorderBelowTitleBar = 0;
+        BorderColor = black;
+        Borders = (0, 0, 0, 0);
+        DistanceToSide = 3;
+        PaddingBetweenButtons = 1;
+        ShowTextOnTitleButtons = true;
+        TextureBackground = None;
+        TextureTitleBar = None;
+        TitleBarColor = white;
+        TitleBarHeight = 0.0;
+        TitleColor = #3C3C3C;
+    }
+}
+
+ComboBox.ComboBox1 {
+    ChangeItemOnScroll = false;
+    ItemsToDisplay = 0;
+    MaximumItems = 0;
+    Position = (1640, 100);
+    Size = (220, 22);
+    TextSize = 13;
+
+    Renderer {
+        ArrowBackgroundColor = #F5F5F5;
+        ArrowBackgroundColorHover = white;
+        ArrowColor = #3C3C3C;
+        ArrowColorHover = black;
+        BackgroundColor = #F5F5F5;
+        BorderColor = black;
+        Borders = (1, 1, 1, 1);
+        Padding = (0, 0, 0, 0);
+        TextColor = #3C3C3C;
+        TextureArrow = None;
+        TextureArrowDisabled = None;
+        TextureArrowHover = None;
+        TextureBackground = None;
+        TextureBackgroundDisabled = None;
+    }
+}
+
+Slider.Slider1 {
+    ChangeValueOnScroll = true;
+    InvertedDirection = false;
+    Maximum = 10;
+    Minimum = 0;
+    Position = (1690, 280);
+    Size = (200, 16);
+    Step = 1;
+    Value = 0;
+
+    Renderer {
+        BorderColor = black;
+        BorderColorHover = black;
+        Borders = (1, 1, 1, 1);
+        TextureThumb = None;
+        TextureThumbHover = None;
+        TextureTrack = None;
+        TextureTrackHover = None;
+        ThumbColor = #F5F5F5;
+        ThumbColorHover = white;
+        TrackColor = #F5F5F5;
+        TrackColorHover = white;
+    }
+}
+
+Slider.Slider2 {
+    ChangeValueOnScroll = true;
+    InvertedDirection = false;
+    Maximum = 10;
+    Minimum = 0;
+    Position = (1690, 370);
+    Size = (200, 16);
+    Step = 1;
+    Value = 0;
+
+    Renderer {
+        BorderColor = black;
+        BorderColorHover = black;
+        Borders = (1, 1, 1, 1);
+        TextureThumb = None;
+        TextureThumbHover = None;
+        TextureTrack = None;
+        TextureTrackHover = None;
+        ThumbColor = #F5F5F5;
+        ThumbColorHover = white;
+        TrackColor = #F5F5F5;
+        TrackColorHover = white;
+    }
+}
+
+Label.Label1 {
+    HorizontalAlignment = Center;
+    Position = (1570, 280);
+    Renderer = &1;
+    Size = (107.2, 18);
+    Text = Sigma;
+    TextSize = 13;
+}
+
+Label.Label3 {
+    HorizontalAlignment = Center;
+    Position = (1570, 370);
+    Renderer = &1;
+    Size = (107.2, 18);
+    Text = Radius;
+    TextSize = 13;
+}
