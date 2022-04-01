@@ -1,6 +1,6 @@
 #version 330 core
 
-#define MAX_KERNEL_SIZE 128
+#define MAX_KERNEL_SIZE 1280
 
 uniform sampler2D texture;
 // uniform int radius = 1;
