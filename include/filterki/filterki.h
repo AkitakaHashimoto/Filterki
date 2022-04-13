@@ -13,15 +13,18 @@ class Filterki
 {
 public:
 	Filterki(sf::RenderWindow& renderWindow);
-
 	void handleEvent(const sf::Event& event);
-
 	void draw();
 
 private:
-	std::vector<float> generateKernel(float sigma, int radius);
+	std::vector<float> generateKernel(float sigma, int radius) const;
 
-	sf::Shader shader{};
+	void loadImage();
+	void loadShader();
+	void loadGUI();
+
+	sf::Shader shaderBlur{};
+	sf::Shader shaderEdge{};
 	tgui::Gui gui{};
 	sf::Texture tex{};
 	sf::Sprite sprite{};

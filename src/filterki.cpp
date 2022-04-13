@@ -1,7 +1,7 @@
 #include <filterki/filterki.h>
 #include <config.h>
 
-std::vector<float> Filterki::generateKernel(float sigma, int radius)
+std::vector<float> Filterki::generateKernel(float sigma, int radius) const
 {
 	std::vector<float> kernel{};
 	auto sum = 0.0F;
@@ -29,34 +29,22 @@ std::vector<float> Filterki::generateKernel(float sigma, int radius)
 Filterki::Filterki(sf::RenderWindow& renderWindow)
 {
 	this->gui.setTarget(renderWindow);
-
-	const auto pathImage = GetPathData() / "images" / "rumble.jpg";
-	this->tex.loadFromFile(pathImage.string());
-	this->sprite.setTexture(tex);
+	this->loadImage();
+	this->loadShader();
+	this->loadGUI();
 
 	const auto texWidth{ static_cast<float>(this->sprite.getTexture()->getSize().x) };
 	const auto texHeight{ static_cast<float>(this->sprite.getTexture()->getSize().y) };
-
-	const auto pathShaderFrag = GetPathData() / "shaders" / "blurGaussian2D.frag";
-
-	this->shader.loadFromFile(pathShaderFrag.string(), sf::Shader::Fragment);
-	this->shader.setUniform("texture", sf::Shader::CurrentTexture);
-	this->shader.setUniform("width", texWidth);
-	this->shader.setUniform("height", texHeight);
-
-	const auto pathLayout = GetPathData() / "layout" / "form.txt";
-	gui.loadWidgetsFromFile(pathLayout.string());
 	auto childWindow = gui.get<tgui::ChildWindow>("ChildWindow1");
 	const auto size = childWindow->getSize();
 	tgui::Canvas::Ptr canvas = tgui::Canvas::create();
 	canvas->setSize({ texWidth, texHeight });
 	canvas->clear();
-	canvas->draw(sprite, &shader);
+	canvas->draw(sprite, &shaderBlur);
 	canvas->display();
 	canvas->setPosition((size.x / 2) - canvas->getSize().x / 2.f, (size.y / 2) - canvas->getSize().y / 2.f);
 	childWindow->add(canvas, "canvas");
 	childWindow->getRenderer()->setBackgroundColor(sf::Color{ 88, 88, 88, 88 });
-	//childWindow->getRenderer()->setTitleBarHeight(0.0f);
 
 	auto sliderSigma = this->gui.get<tgui::Slider>("Slider1");
 	auto sliderRadius = this->gui.get<tgui::Slider>("Slider2");
@@ -72,9 +60,9 @@ Filterki::Filterki(sf::RenderWindow& renderWindow)
 		const float* p = &kernel[0];
 
 		canvas->clear();
-		this->shader.setUniformArray("kernel", p, kernelSize);
-		this->shader.setUniform("radius", radius);
-		canvas->draw(sprite, &shader);
+		this->shaderBlur.setUniformArray("kernel", p, kernelSize);
+		this->shaderBlur.setUniform("radius", radius);
+		canvas->draw(sprite, &shaderBlur);
 		canvas->display();
 		});
 
@@ -90,9 +78,31 @@ Filterki::Filterki(sf::RenderWindow& renderWindow)
 		const float* p = &kernel[0];
 
 		canvas->clear();
-		this->shader.setUniformArray("kernel", p, kernelSize);
-		this->shader.setUniform("radius", radius);
-		canvas->draw(sprite, &shader);
+		this->shaderBlur.setUniformArray("kernel", p, kernelSize);
+		this->shaderBlur.setUniform("radius", radius);
+		canvas->draw(sprite, &shaderBlur);
+		canvas->display();
+		});
+
+	// Set up drop down menu callbacks.
+
+	auto comboBox = this->gui.get<tgui::ComboBox>("ComboBox1");
+	comboBox->addItem("Blur");
+	comboBox->addItem("Edge Detection");
+	comboBox->onItemSelect([this](tgui::String x) {
+		auto window = this->gui.get<tgui::ChildWindow>("ChildWindow1");
+		auto canvas = window->get<tgui::Canvas>("canvas");
+		canvas->clear();
+
+		if (x == "Blur")
+		{
+			canvas->draw(sprite, &shaderBlur);
+		}
+		else
+		{
+			canvas->draw(sprite, &shaderEdge);
+		}
+
 		canvas->display();
 		});
 }
@@ -105,6 +115,37 @@ void Filterki::handleEvent(const sf::Event& event)
 void Filterki::draw()
 {
 	this->gui.draw();
+}
+
+void Filterki::loadImage()
+{
+	const auto pathImage = GetPathData() / "images" / "rumble.jpg";
+	this->tex.loadFromFile(pathImage.string());
+	this->sprite.setTexture(tex);
+}
+
+void Filterki::loadShader()
+{
+	const auto texWidth{ static_cast<float>(this->sprite.getTexture()->getSize().x) };
+	const auto texHeight{ static_cast<float>(this->sprite.getTexture()->getSize().y) };
+
+	const auto pathShaderBlur = GetPathData() / "shaders" / "blurGaussian2D.frag";
+	this->shaderBlur.loadFromFile(pathShaderBlur.string(), sf::Shader::Fragment);
+	this->shaderBlur.setUniform("texture", sf::Shader::CurrentTexture);
+	this->shaderBlur.setUniform("width", texWidth);
+	this->shaderBlur.setUniform("height", texHeight);
+
+	const auto pathShaderEdge = GetPathData() / "shaders" / "sobelGrayscale.frag";
+	this->shaderEdge.loadFromFile(pathShaderEdge.string(), sf::Shader::Fragment);
+	this->shaderEdge.setUniform("texture", sf::Shader::CurrentTexture);
+	this->shaderEdge.setUniform("width", texWidth);
+	this->shaderEdge.setUniform("height", texHeight);
+}
+
+void Filterki::loadGUI()
+{
+	const auto pathLayout = GetPathData() / "layout" / "form.txt";
+	gui.loadWidgetsFromFile(pathLayout.string());
 }
 
 
